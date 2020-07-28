@@ -3,12 +3,18 @@ from influxdb import exceptions
 import pandas as pd
 import config
 
-def connect_database(db_name='testdb'):
+def connect_database(db_name='testdb', from_=None):
     try:
-        client = InfluxDBClient( host =config.influxdb_config.get('influxdb_host'),
-                                port = config.influxdb_config.get('influxdb_port'),
-                                database=config.influxdb_config.get('influxdb_db')
-                               )
+        if(from_):
+            client = InfluxDBClient( host =config.influxdb_config.get('influxdb_dockernet_host'),
+                                    port = config.influxdb_config.get('influxdb_port'),
+                                    database=config.influxdb_config.get('influxdb_db')
+                                   )
+        else:
+            client = InfluxDBClient( host =config.influxdb_config.get('influxdb_host'),
+                                    port = config.influxdb_config.get('influxdb_port'),
+                                    database=config.influxdb_config.get('influxdb_db')
+                                   )
         client.ping()
     except Exception as e:
         print('error connecting to database: {}'.format(e))

@@ -9,7 +9,8 @@ log_config={
 
 influxdb_config={
     
-    'influxdb_host' : '172.18.0.2', #check the ipv4 from docker network
+    'influxdb_dockernet_host' : '172.18.0.2', #check the ipv4 from docker network
+    'influxdb_host' : '127.0.0.1', #check the ipv4 from docker network
     'influxdb_port' : 8086,
     'influxdb_db' : 'testdb'
 }
