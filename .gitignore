@@ -1,0 +1,6 @@
+# Ignore ipython checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Ignore pycache folder
+/__pycache__/*
