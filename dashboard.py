@@ -21,46 +21,53 @@ def generate_table(dataframe, max_rows=10):
 idx = 0
 gap = 1000
 
+#---------------------------------------------------------------
 client = influxdb_client.connect_database()
 
 df = influxdb_client.query_to_dataframe(client)
-# Choose a css stylesheet
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-# Instanciating web app
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 # Instanciating data
 time = df.set_index('time')['2020-07-27'][idx: gap + idx] #this query should be done by client
 
-# Create plot
-fig = px.line(time)
+
+#---------------------------------------------------------------------
+
+# Instanciating web app
+app = dash.Dash(__name__)
 
 # Create html structure
-app.layout = html.Div(children=[
-    # Create html H1 tag
-    html.H1(children='Personal Dashboard'),
-    
-    # Create table
-    html.Div(children ='''
-        Table
-    '''),
-    
-    generate_table(
-        time[-10:]
-    ),
-    
-    # Create html Div tag
-    html.Div(children='''
-        Monitoring IPC.
-    '''),
-    
-    # create html image element
-    dcc.Graph(
-        id='example-graph',
-        figure=fig
-    )
-])
+app.layout = html.Div(
+    children=[
+        html.Div(
+            className='row',
+            children = [
+                html.Div(
+                    className='four columns div-user-controls',
+                    children = [
+                        html.H2('Dash - STOCK PRICES'),
+                        html.P('''Visualising time series with Plotly - Dash'''),
+                        html.P('''Pick one or more stocks from the dropdown below.''')
+                    ]
+                ),
+                html.Div(
+                    className='eight columns div-charts bg-grey',
+                    children = [
+                        dcc.Graph(id='timeseries',
+                                  config={'displayModeBar': False},
+                                  animate = True,
+                                  figure = px.line(time,
+                                                   template='plotly_dark'
+                                                  ).update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
+                                                                   'paper_bgcolor': 'rgba(0, 0, 0, 0)'
+                                                                  }
+                                                                 )
+                                 )
+                    ]
+                )
+            ]
+        )
+    ]
+)
 
 # run app
 if __name__ == '__main__':
