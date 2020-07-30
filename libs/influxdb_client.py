@@ -1,7 +1,7 @@
 from influxdb import InfluxDBClient, DataFrameClient
 from influxdb import exceptions
 import pandas as pd
-import config
+from . import config
 
 def connect_database(db_name='testdb', from_=None):
     try:
@@ -26,6 +26,7 @@ def query_to_dataframe(client ,query = 'Select time,value from mxx'):
         results = client.query(query)
         df = pd.DataFrame([x for x in results][0])
         df['time']= pd.to_datetime(df.time)
+        df['serie'] = results.keys()[0][0]
     except Exception as e:
         print('error querying to database: {}'.format(e))
         raise

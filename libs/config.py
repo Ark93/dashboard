@@ -18,3 +18,5 @@ influxdb_config={
 script_config={    
     'timezone' : pytz.timezone('America/Mexico_City'),
 }
+
+stocks = ['mxx']
